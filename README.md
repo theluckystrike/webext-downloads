@@ -10,6 +10,10 @@ Typed download helpers for Chrome extensions.
 ## Installation
 
 ```bash
+npm install @anthropic/webext-downloads
+```
+
+```bash
 pnpm add @anthropic/webext-downloads
 ```
 
