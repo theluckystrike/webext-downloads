@@ -142,7 +142,6 @@ Returns: `Promise<void>`
 
 MIT
 
-
 ---
 
 Built by [theluckystrike](https://github.com/theluckystrike) — [zovo.one](https://zovo.one)
