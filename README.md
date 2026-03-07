@@ -1,3 +1,8 @@
+[![CI](https://github.com/theluckystrike/webext-downloads/actions/workflows/ci.yml/badge.svg)](https://github.com/theluckystrike/webext-downloads/actions)
+[![npm](https://img.shields.io/npm/v/@anthropic/webext-downloads)](https://www.npmjs.com/package/@anthropic/webext-downloads)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue.svg)](https://www.typescriptlang.org/)
+
 # @anthropic/webext-downloads
 
 Typed download helpers for Chrome extensions.
@@ -136,4 +141,4 @@ MIT
 
 ---
 
-Built with ❤️ by [zovo.one](https://zovo.one)
+Built by [theluckystrike](https://github.com/theluckystrike) — [zovo.one](https://zovo.one)
