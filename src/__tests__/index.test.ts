@@ -28,7 +28,7 @@ const mockDownloadItem: chrome.downloads.DownloadItem = {
   totalBytes: 1000,
   fileSize: 1000,
   exists: true,
-};
+} as any;
 
 // Helper to check if chrome API is available
 const hasChromeDownloads = () => {
@@ -37,19 +37,19 @@ const hasChromeDownloads = () => {
 
 describe('downloadFile', () => {
   beforeEach(() => {
-    global.chrome = {
+    globalThis.chrome = {
       downloads: {
         download: vi.fn((opts, cb) => cb(1)),
       },
       runtime: {
         lastError: undefined,
       },
-    };
+    } as any;
   });
 
   afterEach(() => {
     // Reset to undefined
-    (global as any).chrome = undefined;
+    (globalThis as any).chrome = undefined;
   });
 
   it('should download a file with url only', async () => {
@@ -79,7 +79,7 @@ describe('downloadFile', () => {
 
   it('should throw when API is unavailable', async () => {
     // First remove chrome
-    (global as any).chrome = undefined;
+    (globalThis as any).chrome = undefined;
     // Need to re-require to test again with undefined chrome
     // Since the function is already loaded, we test the behavior
     expect(hasChromeDownloads()).toBe(false);
@@ -91,18 +91,18 @@ describe('downloadFile', () => {
 
 describe('cancelDownload', () => {
   beforeEach(() => {
-    global.chrome = {
+    globalThis.chrome = {
       downloads: {
         cancel: vi.fn((id, cb) => cb()),
       },
       runtime: {
         lastError: undefined,
       },
-    };
+    } as any;
   });
 
   afterEach(() => {
-    (global as any).chrome = undefined;
+    (globalThis as any).chrome = undefined;
   });
 
   it('should cancel a download', async () => {
@@ -111,7 +111,7 @@ describe('cancelDownload', () => {
   });
 
   it('should throw when API is unavailable', async () => {
-    (global as any).chrome = undefined;
+    (globalThis as any).chrome = undefined;
     expect(hasChromeDownloads()).toBe(false);
     await expect(cancelDownload(1)).rejects.toThrow('chrome.downloads API is not available');
   });
@@ -119,18 +119,18 @@ describe('cancelDownload', () => {
 
 describe('pauseDownload', () => {
   beforeEach(() => {
-    global.chrome = {
+    globalThis.chrome = {
       downloads: {
         pause: vi.fn((id, cb) => cb()),
       },
       runtime: {
         lastError: undefined,
       },
-    };
+    } as any;
   });
 
   afterEach(() => {
-    (global as any).chrome = undefined;
+    (globalThis as any).chrome = undefined;
   });
 
   it('should pause a download', async () => {
@@ -141,18 +141,18 @@ describe('pauseDownload', () => {
 
 describe('resumeDownload', () => {
   beforeEach(() => {
-    global.chrome = {
+    globalThis.chrome = {
       downloads: {
         resume: vi.fn((id, cb) => cb()),
       },
       runtime: {
         lastError: undefined,
       },
-    };
+    } as any;
   });
 
   afterEach(() => {
-    (global as any).chrome = undefined;
+    (globalThis as any).chrome = undefined;
   });
 
   it('should resume a download', async () => {
@@ -163,18 +163,18 @@ describe('resumeDownload', () => {
 
 describe('getDownloads', () => {
   beforeEach(() => {
-    global.chrome = {
+    globalThis.chrome = {
       downloads: {
         search: vi.fn((query, cb) => cb([mockDownloadItem])),
       },
       runtime: {
         lastError: undefined,
       },
-    };
+    } as any;
   });
 
   afterEach(() => {
-    (global as any).chrome = undefined;
+    (globalThis as any).chrome = undefined;
   });
 
   it('should get all downloads with empty query', async () => {
@@ -195,18 +195,18 @@ describe('getDownloads', () => {
 
 describe('onDownloadChanged', () => {
   beforeEach(() => {
-    global.chrome = {
+    globalThis.chrome = {
       downloads: {
         onChanged: {
           addListener: vi.fn(),
           removeListener: vi.fn(),
         },
       },
-    };
+    } as any;
   });
 
   afterEach(() => {
-    (global as any).chrome = undefined;
+    (globalThis as any).chrome = undefined;
   });
 
   it('should add and remove listener', () => {
@@ -218,7 +218,7 @@ describe('onDownloadChanged', () => {
   });
 
   it('should throw when API is unavailable', () => {
-    (global as any).chrome = undefined;
+    (globalThis as any).chrome = undefined;
     expect(hasChromeDownloads()).toBe(false);
     expect(() => onDownloadChanged(vi.fn())).toThrow(
       'chrome.downloads API is not available'
@@ -228,18 +228,18 @@ describe('onDownloadChanged', () => {
 
 describe('openDownload', () => {
   beforeEach(() => {
-    global.chrome = {
+    globalThis.chrome = {
       downloads: {
         open: vi.fn((id, cb) => cb()),
       },
       runtime: {
         lastError: undefined,
       },
-    };
+    } as any;
   });
 
   afterEach(() => {
-    (global as any).chrome = undefined;
+    (globalThis as any).chrome = undefined;
   });
 
   it('should open a download', async () => {
@@ -250,18 +250,18 @@ describe('openDownload', () => {
 
 describe('showInFolder', () => {
   beforeEach(() => {
-    global.chrome = {
+    globalThis.chrome = {
       downloads: {
         show: vi.fn((id) => true),
       },
       runtime: {
         lastError: undefined,
       },
-    };
+    } as any;
   });
 
   afterEach(() => {
-    (global as any).chrome = undefined;
+    (globalThis as any).chrome = undefined;
   });
 
   it('should show download in folder', async () => {
