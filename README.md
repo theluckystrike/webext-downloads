@@ -1,20 +1,20 @@
 [![CI](https://github.com/theluckystrike/webext-downloads/actions/workflows/ci.yml/badge.svg)](https://github.com/theluckystrike/webext-downloads/actions)
-[![npm](https://img.shields.io/npm/v/@anthropic/webext-downloads)](https://www.npmjs.com/package/@anthropic/webext-downloads)
+[![npm](https://img.shields.io/npm/v/@theluckystrike/webext-downloads)](https://www.npmjs.com/package/@theluckystrike/webext-downloads)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue.svg)](https://www.typescriptlang.org/)
 
-# @anthropic/webext-downloads
+# @theluckystrike/webext-downloads
 
 Typed download helpers for Chrome extensions.
 
 ## Installation
 
 ```bash
-npm install @anthropic/webext-downloads
+npm install @theluckystrike/webext-downloads
 ```
 
 ```bash
-pnpm add @anthropic/webext-downloads
+pnpm add @theluckystrike/webext-downloads
 ```
 
 ## Usage
@@ -29,7 +29,7 @@ import {
   onDownloadChanged,
   openDownload,
   showInFolder,
-} from '@anthropic/webext-downloads';
+} from '@theluckystrike/webext-downloads';
 
 // Download a file
 const downloadId = await downloadFile({
