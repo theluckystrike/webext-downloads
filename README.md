@@ -1,11 +1,21 @@
-[![CI](https://github.com/theluckystrike/webext-downloads/actions/workflows/ci.yml/badge.svg)](https://github.com/theluckystrike/webext-downloads/actions)
+[![CI](https://github.com/theluckystrike/webext-downloads/actions/workflows/ci.yml/badge.svg)](https://github.com/theluckystrike/webext-downloads/actions/workflows/ci.yml)
 [![npm](https://img.shields.io/npm/v/@theluckystrike/webext-downloads)](https://www.npmjs.com/package/@theluckystrike/webext-downloads)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue.svg)](https://www.typescriptlang.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue.svg)](https://www.typescriptlang.org/)
 
 # @theluckystrike/webext-downloads
 
-Typed download helpers for Chrome extensions.
+> Typed download helpers for Chrome extensions — download, track progress, pause/resume, and manage download history. Part of @zovo/webext.
+
+## Features
+
+- 📥 **Download Files** — Initiate downloads with custom filenames and save dialog options
+- ⏸️ **Pause & Resume** — Control download lifecycle with pause and resume capabilities
+- ❌ **Cancel Downloads** — Cancel in-progress downloads at any time
+- 🔍 **Search Downloads** — Query download history with flexible filters
+- 📂 **Open & Show** — Open downloaded files or reveal them in the file manager
+- 🔔 **Event Listeners** — Subscribe to download state changes in real-time
+- 🛡️ **TypeScript** — Full type safety with comprehensive type definitions
 
 ## Installation
 
@@ -17,7 +27,7 @@ npm install @theluckystrike/webext-downloads
 pnpm add @theluckystrike/webext-downloads
 ```
 
-## Usage
+## Quick Start
 
 ```typescript
 import {
@@ -65,78 +75,174 @@ const removeListener = onDownloadChanged((delta) => {
 removeListener();
 ```
 
-## API
+## Advanced Usage
 
-### `downloadFile(opts)`
+### Progress Bar Implementation
 
-Downloads a file using the Chrome downloads API.
+Track download progress using event listeners:
 
-- `opts.url` (required): The URL to download
-- `opts.filename` (optional): The filename to save as
-- `opts.saveAs` (optional): Show the "Save As" dialog
+```typescript
+const downloadProgress = new Map<number, number>();
 
-Returns: `Promise<number>` - The download ID
+onDownloadChanged((delta) => {
+  if (delta.state?.current === 'in_progress') {
+    const id = delta.id;
+    // Query the download to get bytes downloaded/total
+    getDownloads({ id }).then((items) => {
+      if (items[0]) {
+        const { bytesReceived, totalBytes } = items[0];
+        const percent = (bytesReceived / totalBytes) * 100;
+        downloadProgress.set(id, percent);
+        console.log(`Download ${id}: ${percent.toFixed(1)}%`);
+      }
+    });
+  }
+  
+  if (delta.state?.current === 'complete') {
+    console.log(`Download ${delta.id} completed!`);
+    downloadProgress.delete(delta.id);
+  }
+});
+```
 
-### `cancelDownload(id)`
+### Batch Download Queue
 
-Cancels a download.
+Process multiple downloads sequentially:
 
-- `id`: The download ID to cancel
+```typescript
+async function downloadQueue(urls: string[]): Promise<number[]> {
+  const results: number[] = [];
+  
+  for (const url of urls) {
+    try {
+      const id = await downloadFile({ url });
+      results.push(id);
+    } catch (error) {
+      console.error(`Failed to download ${url}:`, error);
+    }
+  }
+  
+  return results;
+}
 
-Returns: `Promise<void>`
+// Usage
+const files = await downloadQueue([
+  'https://example.com/file1.pdf',
+  'https://example.com/file2.pdf',
+  'https://example.com/file3.pdf',
+]);
+```
 
-### `pauseDownload(id)`
+### Custom Filename with Path
 
-Pauses a download.
+Specify both filename and directory:
 
-- `id`: The download ID to pause
+```typescript
+const downloadId = await downloadFile({
+  url: 'https://example.com/data.csv',
+  filename: 'Downloads/my-app/data.csv',
+});
+```
 
-Returns: `Promise<void>`
+### Download → Parse Pipeline
 
-### `resumeDownload(id)`
+Download and process files automatically:
 
-Resumes a paused download.
+```typescript
+import { downloadFile, getDownloads } from '@theluckystrike/webext-downloads';
 
-- `id`: The download ID to resume
+async function downloadAndProcess<T>(
+  url: string,
+  processFn: (content: string) => T
+): Promise<T> {
+  // Start download
+  const downloadId = await downloadFile({ url });
+  
+  // Wait for completion
+  await new Promise<void>((resolve) => {
+    const removeListener = onDownloadChanged((delta) => {
+      if (delta.id === downloadId && delta.state?.current === 'complete') {
+        removeListener();
+        resolve();
+      }
+    });
+  });
+  
+  // Get the file path
+  const items = await getDownloads({ id: downloadId });
+  const filePath = items[0]?.filename;
+  
+  // Process the file (requires additional file reading logic)
+  console.log(`File saved to: ${filePath}`);
+  
+  return processFn('processed content');
+}
+```
 
-Returns: `Promise<void>`
+## API Reference
 
-### `getDownloads(query?)`
+| Function | Description | Returns |
+|----------|-------------|---------|
+| `downloadFile(opts)` | Downloads a file with optional filename and save dialog | `Promise<number>` |
+| `cancelDownload(id)` | Cancels an in-progress download | `Promise<void>` |
+| `pauseDownload(id)` | Pauses a download | `Promise<void>` |
+| `resumeDownload(id)` | Resumes a paused download | `Promise<void>` |
+| `getDownloads(query?)` | Searches download history | `Promise<DownloadItem[]>` |
+| `onDownloadChanged(cb)` | Subscribes to download state changes | `() => void` |
+| `openDownload(id)` | Opens the downloaded file | `Promise<void>` |
+| `showInFolder(id)` | Shows file in system file manager | `Promise<void>` |
 
-Gets downloads matching the query.
+### Types
 
-- `query` (optional): Query parameters (see Chrome downloads API)
+```typescript
+interface DownloadOptions {
+  url: string;
+  filename?: string;
+  saveAs?: boolean;
+}
+```
 
-Returns: `Promise<DownloadItem[]>`
+## Permissions
 
-### `onDownloadChanged(cb)`
+Add these permissions to your `manifest.json`:
 
-Sets up a listener for download state changes.
+```json
+{
+  "permissions": [
+    "downloads"
+  ],
+  "optional_host_permissions": [
+    "<all_urls>"
+  ]
+}
+```
 
-- `cb`: Callback function called when download state changes
+To open downloaded files, also add:
 
-Returns: `Function` - Call to remove the listener
+```json
+{
+  "permissions": [
+    "downloads",
+    "downloads.open"
+  ]
+}
+```
 
-### `openDownload(id)`
-
-Opens the downloaded file.
-
-- `id`: The download ID to open
-
-Returns: `Promise<void>`
-
-### `showInFolder(id)`
-
-Shows the downloaded file in the file manager.
-
-- `id`: The download ID to show in folder
-
-Returns: `Promise<void>`
+> **Note:** The `downloads.open` permission requires Manifest V3 and is only available in Chrome 117+.
 
 ## Requirements
 
 - Chrome extensions environment with `chrome.downloads` API available
 - TypeScript 5.0+
+- Node.js 18+ (for development)
+
+## Related Packages
+
+Part of the @zovo/webext family:
+
+- [`@theluckystrike/webext-tabs`](https://github.com/theluckystrike/webext-tabs) — Typed tab management
+- [`@theluckystrike/webext-storage`](https://github.com/theluckystrike/webext-storage) — Type-safe storage wrapper
+- [`@theluckystrike/webext-notifications`](https://github.com/theluckystrike/webext-notifications) — Desktop notifications
 
 ## License
 
