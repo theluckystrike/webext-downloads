@@ -1,11 +1,18 @@
-[![CI](https://github.com/theluckystrike/webext-downloads/actions/workflows/ci.yml/badge.svg)](https://github.com/theluckystrike/webext-downloads/actions)
-[![npm](https://img.shields.io/npm/v/@theluckystrike/webext-downloads)](https://www.npmjs.com/package/@theluckystrike/webext-downloads)
+[![CI](https://github.com/theluckystrike/webext-downloads/actions/workflows/ci.yml/badge.svg)](https://github.com/theluckystrike/webext-downloads/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue.svg)](https://www.typescriptlang.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue.svg)](https://www.typescriptlang.org/)
+[![Last Commit](https://img.shields.io/github/last-commit/theluckystrike/webext-downloads/main)](https://github.com/theluckystrike/webext-downloads/commits/main)
 
 # @theluckystrike/webext-downloads
 
-Typed download helpers for Chrome extensions.
+Typed download helpers for Chrome extensions. A lightweight TypeScript library that provides promise-based wrappers around the Chrome Downloads API with full type safety.
+
+## Features
+
+- �Type-safe Promise-based API for Chrome downloads
+- 🧩 Full TypeScript support with auto-complete
+- 📦 Lightweight with zero dependencies
+- 🔄 Includes pause, resume, cancel, and more
 
 ## Installation
 
@@ -65,73 +72,123 @@ const removeListener = onDownloadChanged((delta) => {
 removeListener();
 ```
 
-## API
+## API Reference
 
 ### `downloadFile(opts)`
 
 Downloads a file using the Chrome downloads API.
 
-- `opts.url` (required): The URL to download
-- `opts.filename` (optional): The filename to save as
-- `opts.saveAs` (optional): Show the "Save As" dialog
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `opts.url` | `string` | The URL to download (required) |
+| `opts.filename` | `string` | The filename to save as (optional) |
+| `opts.saveAs` | `boolean` | Show the "Save As" dialog (optional) |
 
 Returns: `Promise<number>` - The download ID
+
+---
 
 ### `cancelDownload(id)`
 
 Cancels a download.
 
-- `id`: The download ID to cancel
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `id` | `number` | The download ID to cancel |
 
 Returns: `Promise<void>`
+
+---
 
 ### `pauseDownload(id)`
 
 Pauses a download.
 
-- `id`: The download ID to pause
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `id` | `number` | The download ID to pause |
 
 Returns: `Promise<void>`
+
+---
 
 ### `resumeDownload(id)`
 
 Resumes a paused download.
 
-- `id`: The download ID to resume
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `id` | `number` | The download ID to resume |
 
 Returns: `Promise<void>`
+
+---
 
 ### `getDownloads(query?)`
 
 Gets downloads matching the query.
 
-- `query` (optional): Query parameters (see Chrome downloads API)
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `query` | `DownloadQuery` | Query parameters (optional) |
 
-Returns: `Promise<DownloadItem[]>`
+Returns: `Promise<DownloadItem[]>` - Array of download items
+
+---
 
 ### `onDownloadChanged(cb)`
 
 Sets up a listener for download state changes.
 
-- `cb`: Callback function called when download state changes
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `cb` | `(delta: DownloadDelta) => void` | Callback function called when download state changes |
 
-Returns: `Function` - Call to remove the listener
+Returns: `() => void` - Function to remove the listener
+
+---
 
 ### `openDownload(id)`
 
-Opens the downloaded file.
+Opens the downloaded file in the default viewer.
 
-- `id`: The download ID to open
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `id` | `number` | The download ID to open |
 
 Returns: `Promise<void>`
+
+---
 
 ### `showInFolder(id)`
 
-Shows the downloaded file in the file manager.
+Shows the downloaded file in the system file manager.
 
-- `id`: The download ID to show in folder
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `id` | `number` | The download ID to show |
 
 Returns: `Promise<void>`
+
+---
+
+## Project Structure
+
+```
+webext-downloads/
+├── src/
+│   ├── index.ts          # Main library source
+│   └── __tests__/
+│       └── index.test.ts # Test suite
+├── .github/
+│   └── workflows/
+│       └── ci.yml        # CI pipeline
+├── CHANGELOG.md          # Version history
+├── LICENSE               # MIT license
+├── package.json          # Package configuration
+├── tsconfig.json         # TypeScript config
+└── README.md             # This file
+```
 
 ## Requirements
 
@@ -144,4 +201,4 @@ MIT
 
 ---
 
-Built by [theluckystrike](https://github.com/theluckystrike) — [zovo.one](https://zovo.one)
+Built at [zovo.one](https://zovo.one) by [theluckystrike](https://github.com/theluckystrike)
