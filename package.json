@@ -1,7 +1,7 @@
 {
   "name": "@anthropic/webext-downloads",
   "version": "1.0.0",
-  "description": "Typed download helpers for Chrome extensions",
+  "description": "Typed download helpers for Chrome extensions. Part of @zovo/webext.",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
@@ -18,7 +18,13 @@
   "keywords": [
     "chrome-extension",
     "downloads",
-    "webextensions"
+    "download-manager",
+    "typescript",
+    "webextension",
+    "browser-extension",
+    "manifest-v3",
+    "chrome-downloads",
+    "file-download"
   ],
   "author": "",
   "license": "MIT",

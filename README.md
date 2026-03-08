@@ -1,11 +1,29 @@
-[![CI](https://github.com/theluckystrike/webext-downloads/actions/workflows/ci.yml/badge.svg)](https://github.com/theluckystrike/webext-downloads/actions)
-[![npm](https://img.shields.io/npm/v/@theluckystrike/webext-downloads)](https://www.npmjs.com/package/@theluckystrike/webext-downloads)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue.svg)](https://www.typescriptlang.org/)
+<div align="center">
 
 # @theluckystrike/webext-downloads
 
-Typed download helpers for Chrome extensions.
+Typed download helpers for Chrome extensions. Start, pause, resume, cancel, and monitor downloads with full TypeScript support.
+
+[![npm version](https://img.shields.io/npm/v/@theluckystrike/webext-downloads)](https://www.npmjs.com/package/@theluckystrike/webext-downloads)
+[![npm downloads](https://img.shields.io/npm/dm/@theluckystrike/webext-downloads)](https://www.npmjs.com/package/@theluckystrike/webext-downloads)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue.svg)](https://www.typescriptlang.org/)
+![npm bundle size](https://img.shields.io/bundlephobia/minzip/@theluckystrike/webext-downloads)
+
+[Installation](#installation) · [Quick Start](#quick-start) · [API](#api) · [License](#license)
+
+</div>
+
+---
+
+## Features
+
+- **Full lifecycle** -- download, pause, resume, cancel, erase
+- **Search** -- find downloads by URL, filename, state, or time range
+- **Progress events** -- monitor download progress in real-time
+- **File operations** -- open, show in folder, get file icon
+- **Typed** -- full TypeScript support for all download operations
+- **Promise-based** -- async/await for every method
 
 ## Installation
 
@@ -13,135 +31,82 @@ Typed download helpers for Chrome extensions.
 npm install @theluckystrike/webext-downloads
 ```
 
+<details>
+<summary>Other package managers</summary>
+
 ```bash
 pnpm add @theluckystrike/webext-downloads
+# or
+yarn add @theluckystrike/webext-downloads
 ```
 
-## Usage
+</details>
+
+## Quick Start
 
 ```typescript
-import {
-  downloadFile,
-  cancelDownload,
-  pauseDownload,
-  resumeDownload,
-  getDownloads,
-  onDownloadChanged,
-  openDownload,
-  showInFolder,
-} from '@theluckystrike/webext-downloads';
+import { Downloads } from "@theluckystrike/webext-downloads";
 
-// Download a file
-const downloadId = await downloadFile({
-  url: 'https://example.com/file.pdf',
-  filename: 'my-file.pdf',
-  saveAs: true,
-});
+const id = await Downloads.download({ url: "https://example.com/file.pdf" });
+await Downloads.pause(id);
+await Downloads.resume(id);
+await Downloads.cancel(id);
 
-// Get all downloads
-const downloads = await getDownloads({ query: ['pdf'] });
-
-// Pause a download
-await pauseDownload(downloadId);
-
-// Resume a download
-await resumeDownload(downloadId);
-
-// Cancel a download
-await cancelDownload(downloadId);
-
-// Open the downloaded file
-await openDownload(downloadId);
-
-// Show in folder
-await showInFolder(downloadId);
-
-// Listen for download changes
-const removeListener = onDownloadChanged((delta) => {
-  console.log('Download changed:', delta);
-});
-
-// Remove listener when done
-removeListener();
+const items = await Downloads.search({ state: "complete" });
 ```
 
 ## API
 
-### `downloadFile(opts)`
+| Method | Description |
+|--------|-------------|
+| `download(options)` | Start a download |
+| `pause(id)` | Pause a download |
+| `resume(id)` | Resume a paused download |
+| `cancel(id)` | Cancel a download |
+| `search(query)` | Search downloads by criteria |
+| `erase(query)` | Erase matching downloads from history |
+| `open(id)` | Open a downloaded file |
+| `showInFolder(id)` | Show file in OS file manager |
+| `getFileIcon(id)` | Get the file type icon |
+| `onChanged(callback)` | Monitor download state changes |
+| `onCreated(callback)` | Listen for new downloads |
 
-Downloads a file using the Chrome downloads API.
+## Permissions
 
-- `opts.url` (required): The URL to download
-- `opts.filename` (optional): The filename to save as
-- `opts.saveAs` (optional): Show the "Save As" dialog
+```json
+{ "permissions": ["downloads"] }
+```
 
-Returns: `Promise<number>` - The download ID
+## Part of @zovo/webext
 
-### `cancelDownload(id)`
+This package is part of the [@zovo/webext](https://github.com/theluckystrike) family -- typed, modular utilities for Chrome extension development:
 
-Cancels a download.
+| Package | Description |
+|---------|-------------|
+| [webext-storage](https://github.com/theluckystrike/webext-storage) | Typed storage with schema validation |
+| [webext-messaging](https://github.com/theluckystrike/webext-messaging) | Type-safe message passing |
+| [webext-tabs](https://github.com/theluckystrike/webext-tabs) | Tab query helpers |
+| [webext-cookies](https://github.com/theluckystrike/webext-cookies) | Promise-based cookies API |
+| [webext-i18n](https://github.com/theluckystrike/webext-i18n) | Internationalization toolkit |
 
-- `id`: The download ID to cancel
+## Contributing
 
-Returns: `Promise<void>`
+Contributions are welcome! Please open an issue or submit a pull request.
 
-### `pauseDownload(id)`
-
-Pauses a download.
-
-- `id`: The download ID to pause
-
-Returns: `Promise<void>`
-
-### `resumeDownload(id)`
-
-Resumes a paused download.
-
-- `id`: The download ID to resume
-
-Returns: `Promise<void>`
-
-### `getDownloads(query?)`
-
-Gets downloads matching the query.
-
-- `query` (optional): Query parameters (see Chrome downloads API)
-
-Returns: `Promise<DownloadItem[]>`
-
-### `onDownloadChanged(cb)`
-
-Sets up a listener for download state changes.
-
-- `cb`: Callback function called when download state changes
-
-Returns: `Function` - Call to remove the listener
-
-### `openDownload(id)`
-
-Opens the downloaded file.
-
-- `id`: The download ID to open
-
-Returns: `Promise<void>`
-
-### `showInFolder(id)`
-
-Shows the downloaded file in the file manager.
-
-- `id`: The download ID to show in folder
-
-Returns: `Promise<void>`
-
-## Requirements
-
-- Chrome extensions environment with `chrome.downloads` API available
-- TypeScript 5.0+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
 ## License
 
-MIT
+MIT License -- see [LICENSE](LICENSE) for details.
 
 ---
 
-Built by [theluckystrike](https://github.com/theluckystrike) — [zovo.one](https://zovo.one)
+<div align="center">
+
+Built by [theluckystrike](https://github.com/theluckystrike) · [zovo.one](https://zovo.one)
+
+</div>
