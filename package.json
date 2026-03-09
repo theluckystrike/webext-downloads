@@ -1,7 +1,7 @@
 {
-  "name": "@anthropic/webext-downloads",
+  "name": "@theluckystrike/webext-downloads",
   "version": "1.0.0",
-  "description": "Typed download helpers for Chrome extensions. Part of @zovo/webext.",
+  "description": "Typed download helpers for Chrome extensions — download, track progress, pause/resume, and manage download history. Part of @zovo/webext.",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
@@ -15,31 +15,38 @@
     "test": "vitest run",
     "prepare": "npm run build"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/theluckystrike/webext-downloads.git"
+  },
+  "homepage": "https://github.com/theluckystrike/webext-downloads#readme",
+  "bugs": {
+    "url": "https://github.com/theluckystrike/webext-downloads/issues"
+  },
   "keywords": [
     "chrome-extension",
     "downloads",
-    "download-manager",
-    "typescript",
-    "webextension",
-    "browser-extension",
-    "manifest-v3",
-    "chrome-downloads",
-    "file-download"
+    "webextensions",
+    "zovo"
   ],
-  "author": "",
+  "author": "theluckystrike",
   "license": "MIT",
   "packageManager": "pnpm@10.30.3",
-  "devDependencies": {
-    "@types/chrome": "^0.1.37",
-    "tsup": "^8.5.1",
-    "typescript": "^5.9.3",
-    "vitest": "^4.0.18"
+  "engines": {
+    "node": ">=18"
   },
+  "sideEffects": false,
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
       "default": "./dist/index.js"
     }
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.1.37",
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.18"
   }
 }

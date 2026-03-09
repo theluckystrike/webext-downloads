@@ -1,105 +1,61 @@
-# Contributing to @anthropic/webext-downloads
+# Contributing to @theluckystrike/webext-downloads
 
-Thank you for your interest in contributing! This document outlines the process for contributing to this project.
+Thank you for your interest in contributing! This guide will help you get started.
 
-## Getting Started
+## Development Setup
 
-### Fork and Clone
+1. **Fork the repository**
 
-1. Fork the repository on GitHub
-2. Clone your fork locally:
+2. **Clone your fork:**
+   ```bash
+   git clone https://github.com/YOUR_USERNAME/webext-downloads.git
+   cd webext-downloads
+   ```
+
+3. **Install dependencies:**
+   ```bash
+   npm install
+   # or
+   pnpm install
+   ```
+
+4. **Create a feature branch:**
+   ```bash
+   git checkout -b feature/your-feature-name
+   ```
+
+## Building
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/webext-downloads.git
-cd webext-downloads
+npm run build
 ```
 
-### Install Dependencies
-
-This project uses pnpm:
+## Testing
 
 ```bash
-pnpm install
-```
-
-### Build
-
-Build the TypeScript:
-
-```bash
-pnpm build
-```
-
-### Test
-
-Run the test suite:
-
-```bash
-pnpm test
-```
-
-## Development Workflow
-
-1. Create a new branch for your feature or fix:
-
-```bash
-git checkout -b feature/my-new-feature
-# or
-git checkout -b fix/description-of-fix
-```
-
-2. Make your changes and ensure tests pass:
-
-```bash
-pnpm test
-```
-
-3. Build to verify TypeScript compiles:
-
-```bash
-pnpm build
-```
-
-4. Commit your changes with a descriptive message:
-
-```bash
-git commit -m "feat: add new function for X"
-```
-
-5. Push to your fork and create a Pull Request:
-
-```bash
-git push origin feature/my-new-feature
+npm test
 ```
 
 ## Pull Request Checklist
 
 Before submitting a PR, ensure:
 
-- [ ] Tests pass (`pnpm test`)
-- [ ] Code builds without errors (`pnpm build`)
+- [ ] All tests pass (`npm test`)
+- [ ] Build completes without errors (`npm run build`)
 - [ ] TypeScript types are correct
 - [ ] Documentation is updated if needed
-- [ ] New functions have JSDoc comments
+- [ ] README reflects any new features or API changes
 
 ## Code Style
 
 - Use TypeScript with strict mode
-- Follow existing code patterns
-- Add tests for new functionality
-- Keep functions focused and small
+- Follow existing code conventions
+- Add JSDoc comments for public APIs
 
-## Reporting Issues
+## One Feature Per PR
 
-If you find a bug or have a feature request:
+Please keep pull requests focused on a single feature or fix. This makes them easier to review and merge.
 
-1. Search existing issues first
-2. Create a new issue with:
-   - Clear title
-   - Steps to reproduce (for bugs)
-   - Expected vs actual behavior
-   - Environment details
+## Questions?
 
-## License
-
-By contributing, you agree that your contributions will be licensed under the MIT License.
+Open an issue for questions about contributing or if you encounter any problems.
